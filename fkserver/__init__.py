@@ -1,7 +1,6 @@
 import os
 import sys
 from flask import Flask
-from flask_socketio import SocketIO
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 
@@ -25,9 +24,6 @@ app.config['SECRET_KEY'] = "Luffy is No.1!"
 
 db = SQLAlchemy()
 db.init_app(app)
-
-# websocket
-socketio = SocketIO(app)
 
 # 放在最后, 避免循环引用
 import smtplib

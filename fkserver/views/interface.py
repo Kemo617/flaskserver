@@ -1,28 +1,20 @@
-from fkserver import app, db, request, socketio, User, current_user, json, Stockbase, text
+from fkserver import app, db, request, json, Stockbase, text
 
 # ...
 
-# 有客户端的主页连接到服务器
-@socketio.on('client_connected')
-def handle_connect_event(data):
-    # 保存到数据库
-    if current_user is not None:
-        random_send_id = data['random_send_id']
-        current_user.random_send_id = random_send_id
-        db.session.commit()
-        # socketio.emit(random_send_id, {'message': random_send_id})
-
-# 接收股票源端的数据并处理, 周期性接收
-@socketio.on('stock_data')
-def handle_data_event(data):
-    # 处理接收到的股票价格, 刷新数据库
+# 接收数据源端发来的信息
+@app.route('/interface', methods=['POST'])
+def handle_data_event():
     # 处理4类包, 1.查询用户的股票列表, 返回列表; 2.列表中股票的信息, 返回ok; 3.心跳, 返回ok; 4.A股所有股票的名称和代码
+    result = 'ok'
+    
+    data = request.get_data()
     dict_data = json.loads(data)
     msgtype = dict_data['type']
-    if msgtype == 'singlestock':
-        pass
-    elif msgtype == 'allstocks':
+    if msgtype == 'allstocks':
         dealallstocks(dict_data['data'])
+
+    return result
 
 # 处理接收到的所有股票名称和代码信息
 def dealallstocks(dict):

@@ -1,6 +1,6 @@
 
 from fkserver import redirect, url_for, request, flash, login_required, current_user
-from fkserver import app, db, socketio, User, Stock, Stockbase, get_stockcodes, get_send_id
+from fkserver import app, db, User, Stock, Stockbase, get_stockcodes, get_send_id
 
 # ...
 

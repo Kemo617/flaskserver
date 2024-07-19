@@ -1,6 +1,6 @@
-from fkserver import app, socketio
+from fkserver import app
 
 # ...
 
 if __name__ == '__main__':
-    socketio.run(app)
+    app.run()
