@@ -1,0 +1,87 @@
+{% extends 'basenavi.html' %}
+
+{% block content %}
+
+{# 使用 length 过滤器获取 stocks 变量的长度 #}
+<p>已经添加了{{ stocks|length }}支股票, 最多5支.</p>
+{% if user.is_authenticated %}
+<form method="post" action="{{ url_for('add') }}">
+    股票代码 <input type="text" name="stockcode" autocomplete="off" required>
+    <input class="btn" type="submit" name="submit" value="加自选">
+</form>
+{% endif %}
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    $(document).ready(function() 
+    {
+        setInterval(function() 
+        {
+            $.getJSON('/refresh_pagedata', function(data) 
+            {
+                $.each(data, function(key, value)
+                {
+                    $(key).text(value[0]);
+                    $(key).addClass(value[1]);
+                });
+            });
+        }, 20000); // 每20秒刷新一次
+    });
+</script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+<script type="text/javascript" charset="utf-8">
+    document.addEventListener('DOMContentLoaded', (event) => 
+    {
+        // 生成随机client_id
+        function generateRandomString(length) {
+            let result = '';
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            const charactersLength = characters.length;
+            for (let i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            return result;
+        }
+        var client_id = generateRandomString(10)
+        // 建立 socket 连接
+        var socket = io.connect('http://' + document.domain + ':' +location.port);
+        socket.on('connect', function() 
+        {
+            socket.emit('client_connected', {'random_send_id': client_id});
+        });
+        
+        socket.on(client_id, function(msg) 
+        {
+            // 刷新局部页面
+            //location.reload();
+            //alert('收到消息: ' + msg.message); // message部分的名称由远端任意写
+        });
+    });
+</script>
+<ul class="stock-list">
+    {% for stock in stocks %}
+    <li>
+        <label class="labelstockcode">{{ stock.stockcode }}</label>
+        <label class="labelstockname">{{ stock.stockname }}</label>
+        <label class="labelstockpricetip">当前价</label>
+        <label class={{ stock.getcolorclass() }} id={{ stock.stockcode }}>{{ stock.pricenow }}</label>
+        {% if stock.flag_is_informing %}
+        <label class="labelstockpricetip">目标低价</label>
+        <label class="labelstockpriceset">{{ stock.priceminset }}</label>
+        <label class="labelstockpricetip">目标高价</label>
+        <label class="labelstockpriceset">{{ stock.pricemaxset }}</label>
+        {% endif %}
+        <span class="float-right">
+            <form class="inline-form" method="post" action="{{ url_for('edit') }}">
+                <input type="hidden" name="stockcode" value="{{ stock.stockcode }}">
+                <input class="btn" type="submit" name="edit" value="设置">
+            </form>
+            <form class="inline-form" method="post" action="{{ url_for('delete') }}">
+                <input type="hidden" name="stockcode" value="{{ stock.stockcode }}">
+                <input class="btn" type="submit" name="delete" value="删除" onclick="return confirm('确定删除?')">
+            </form>
+        </span>
+    </li>
+    {% endfor %} 
+</ul>
+
+{% endblock %}

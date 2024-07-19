@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block maintitle %}
+<h2 align="center">
+    来, 盯大盘
+</h2>
+{% endblock %}
+
+{% block content %}
+<form align="center" method="post">
+    {{ form.csrf_token }}
+    <!--可自定义增加颜色-->
+    <p>{{ form.username.label(class="labelwatchlist") }} {{ form.username }}</p>
+    <p>{{ form.password.label(class="labelwatchlist") }} {{ form.password }}</p>
+    <p>
+        {{ form.submitlogin(class="btn", align="left") }}
+        &nbsp;&nbsp;
+        <a href="{{ url_for('register') }}">注册</a>
+    </p>
+    {{ form.submit }}
+</form>
+{% endblock %}
