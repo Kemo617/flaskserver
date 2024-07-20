@@ -10,8 +10,9 @@ def refresh_data():
     data = {}
 
     try:      
-        for stock in Stock.query.filter_by(username=current_user.username):   
-            data['#'+stock.stockcode] = (stock.pricenow, stock.getcolorclass())
+        for stock in Stock.query.filter_by(username=current_user.username): 
+            if stock.pricenow != 0.0:  
+                data['#'+stock.stockcode] = (stock.pricenow, stock.getcolorclass())
         
         data['#status'] = getStockinfoSrcStatusDesc()
     except BaseException as e:
