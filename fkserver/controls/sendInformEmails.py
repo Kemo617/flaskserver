@@ -11,8 +11,7 @@ class ResetTrigger():
     @classmethod
     def isTimeToReset(cls):
         result = False
-
-        # 每天北京时间9:29到15:01任务执行 周六日除外
+        
         newday = getTimeNow().day
         if newday != cls.day:
             cls.day = newday

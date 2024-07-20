@@ -116,12 +116,22 @@ input[name=year] {
     border-radius: 5px;
 }
 
-.imdb {
+.status-offline {
     font-size: 12px;
     font-weight: bold;
     color: black;
     text-decoration: none;
     background: #F5C518;
+    border-radius: 5px;
+    padding: 3px 5px;
+}
+
+.status-online {
+    font-size: 12px;
+    font-weight: bold;
+    color: black;
+    text-decoration: none;
+    background: #d7f2f7;
     border-radius: 5px;
     padding: 3px 5px;
 }
@@ -226,4 +236,10 @@ input[name=year] {
     font-size: 12px;
     border-radius: 5px;
     padding: 3px 5px;
+}
+
+.head-list {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 10px;
 }

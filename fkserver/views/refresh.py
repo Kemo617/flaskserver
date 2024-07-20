@@ -1,5 +1,5 @@
 
-from fkserver import jsonify, Stock, app, login_required, current_user
+from fkserver import jsonify, Stock, app, login_required, current_user, StockinfoSrcStatus
 
 # ...
 
@@ -9,9 +9,15 @@ from fkserver import jsonify, Stock, app, login_required, current_user
 def refresh_data():
     data = {}
 
-    try:       
+    try:      
+        status = '数据源在线'
+        status_style = 'status-online'
+        if not StockinfoSrcStatus.isStatusonline():
+            status = '数据源离线'
+            status_style = 'status-offline'
+
         for stock in Stock.query.filter_by(username=current_user.username):    
-            data['#'+stock.stockcode] = (stock.pricenow, stock.getcolorclass())
+            data['#'+stock.stockcode] = (stock.pricenow, stock.getcolorclass(), status, status_style)
     except BaseException as e:
         pass
     
