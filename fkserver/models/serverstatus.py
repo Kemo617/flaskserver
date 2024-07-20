@@ -22,3 +22,13 @@ class StockinfoSrcStatus():
     @classmethod
     def renewserverstatus(cls):
         cls.lastRecTime = getTimeNow()
+
+# 获取股票数据源的当前状态描述
+def getStockinfoSrcStatusDesc():
+    status = '数据源在线'
+    status_style = 'status-online'
+    if not StockinfoSrcStatus.isStatusonline():
+        status = '数据源离线'
+        status_style = 'status-offline'
+    
+    return (status, status_style)

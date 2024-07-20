@@ -25,9 +25,7 @@ app.config['SECRET_KEY'] = "Luffy is No.1!"
 db = SQLAlchemy()
 db.init_app(app)
 
-
-
-# 放在最后, 避免循环引用
+# 放在最后, 整理引用关系, 避免循环引用
 import smtplib
 import click
 import pytz
@@ -51,8 +49,8 @@ from fkserver.models.stock import Stock
 from fkserver.models.smtp import SMTP
 from fkserver.controls.mail import send_confirm_mail, send_inform_mail
 from fkserver.controls.common import get_users, getTimeNow, get_stockcodes, get_stockcodes_all, update_stockprices, get_send_id
-from fkserver.models.serverstatus import StockinfoSrcStatus
 from fkserver.controls.sendInformEmails import sendinformEmails
+from fkserver.models.serverstatus import StockinfoSrcStatus, getStockinfoSrcStatusDesc
 from fkserver.views import interface, home, login, register, refresh, errors
 from fkserver.views.operations import add, delete, edit, update
 import fkserver.commands
@@ -83,3 +81,9 @@ def inject_stocks():
         pass
 
     return dict(stocks=stocks)
+
+# 模板上下文处理函数, 注入数据源状态
+@app.context_processor
+def inject_srcstatus():
+    srcstatus = getStockinfoSrcStatusDesc()
+    return dict(srcstatus=srcstatus)
