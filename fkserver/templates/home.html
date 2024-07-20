@@ -26,8 +26,13 @@
                 $.each(data, function(key, value)
                 {
                     $(key).text(value[0]);
+                    $(key).removeClass('labelstockpriceBlack')
+                    $(key).removeClass('labelstockpriceRed')
+                    $(key).removeClass('labelstockpriceGreen')
                     $(key).addClass(value[1]);
                     $('#status').text(value[2]);
+                    $('#status').removeClass('status-online')
+                    $('#status').removeClass('status-offline')
                     $('#status').addClass(value[3]);
                 });
             });

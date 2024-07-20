@@ -16,7 +16,8 @@ def refresh_data():
             status = '数据源离线'
             status_style = 'status-offline'
 
-        for stock in Stock.query.filter_by(username=current_user.username):    
+        for stock in Stock.query.filter_by(username=current_user.username):   
+            print(f'--- 状态 {status_style}') 
             data['#'+stock.stockcode] = (stock.pricenow, stock.getcolorclass(), status, status_style)
     except BaseException as e:
         pass
